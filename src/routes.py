@@ -42,3 +42,26 @@ def refresh():
         'access_token': create_access_token(identity=current_user),
         'permissions': current_user
     }), 200
+
+
+@app.route('/api/v1/queue', methods=['GET', 'POST'])
+@jwt_required()
+def queue():
+    current_user = get_jwt_identity()
+
+    try:
+        if request.method == 'GET':
+            if "R" in current_user:
+                return jsonify({'msg': 'Queue'}), 200
+            else:
+                return jsonify({'msg': 'Unauthorized'}), 401
+
+        elif request.method == 'POST':
+            if "W" in current_user:
+                return jsonify({'msg': 'Queue'}), 200
+            else:
+                return jsonify({'msg': 'Unauthorized'}), 401
+
+    except Exception as e:
+        print(e)
+        return jsonify({'msg': 'Bad Request'}), 400
