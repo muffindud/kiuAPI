@@ -32,3 +32,13 @@ def token():
     except Exception as e:
         print(e)
         return jsonify({'msg': 'Bad Request'}), 400
+
+
+@app.route('/api/v1/refresh', methods=['GET'])
+@jwt_required(refresh=True)
+def refresh():
+    current_user = get_jwt_identity()
+    return jsonify({
+        'access_token': create_access_token(identity=current_user),
+        'permissions': current_user
+    }), 200
