@@ -50,7 +50,7 @@ def refresh():
     }), 200
 
 
-@app.route('/api/v1/queue', methods=['GET', 'POST'])
+@app.route('/api/v1/queue', methods=['GET', 'POST', 'PUT'])
 @jwt_required()
 def queue():
     current_user = get_jwt_identity()
@@ -113,6 +113,24 @@ def queue():
                         return jsonify({'msg': 'Data already exists'}), 409
 
                     return jsonify({'msg': 'Data added'}), 201
+                except Exception as e:
+                    print(e)
+                    return jsonify({'msg': 'Bad Request'}), 400
+            else:
+                return jsonify({'msg': 'Unauthorized'}), 401
+
+        elif request.method == 'PUT':
+            if "U" in current_user:
+                try:
+                    data = request.get_json()
+
+                    for key in data.keys():
+                        if "description" not in data[key] or "name" not in data[key] or "queue_list" not in data[key] or len(data[key].keys()) != 3:
+                            return jsonify({'msg': 'Bad Request'}), 400
+
+                    data_manager.add_data(data, update=True)
+
+                    return jsonify({'msg': 'Data updated'}), 200
                 except Exception as e:
                     print(e)
                     return jsonify({'msg': 'Bad Request'}), 400
