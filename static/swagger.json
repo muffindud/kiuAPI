@@ -5,7 +5,7 @@
         "description": "KIU API Documentation",
         "version": "1.0"
     },
-    "host": "192.168.0.23:5000",
+    "host": "127.0.0.1:5000",
     "basePath": "/api/v1/",
     "schemes": [
         "http"
@@ -125,6 +125,109 @@
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/queue": {
+            "get": {
+                "summary": "Get queues",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "type": "string",
+                        "default": "Bearer "
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Queue ID(s):\nEx: id=3 or id=[3, 4, 5]",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "start_id",
+                        "in": "query",
+                        "description": "Start ID",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "end_id",
+                        "in": "query",
+                        "description": "End ID",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "3": {
+                                    "type": "object",
+                                    "properties": {
+                                        "description": {
+                                            "type": "string",
+                                            "example": "D4"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Q4"
+                                        },
+                                        "queue_list": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "1"
+                                            },
+                                            "example": [
+                                                "1",
+                                                "2"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "type": "object",
                             "properties": {
