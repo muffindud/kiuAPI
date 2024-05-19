@@ -26,6 +26,9 @@ class DataManager:
     def add_data(self, data: dict, update: bool = False) -> None:
         if any(k in self.data for k in data.keys()) and not update:
             return -1
+    
+        if any(k not in self.data for k in data.keys()) and update:
+            return -1
 
         for key, value in data.items():
             self.data[key] = value

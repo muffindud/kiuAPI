@@ -128,7 +128,8 @@ def queue():
                         if "description" not in data[key] or "name" not in data[key] or "queue_list" not in data[key] or len(data[key].keys()) != 3:
                             return jsonify({'msg': 'Bad Request'}), 400
 
-                    data_manager.add_data(data, update=True)
+                    if data_manager.add_data(data, update=True) == -1:
+                        return jsonify({'msg': 'Data not found'}), 404
 
                     return jsonify({'msg': 'Data updated'}), 200
                 except Exception as e:
