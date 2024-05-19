@@ -277,7 +277,7 @@
                                     },
                                     "description": {
                                         "type": "string",
-                                        "example": "Queue description",
+                                        "example": "Queue description"
                                     },
                                     "queue_list": {
                                         "type": "array",
@@ -387,7 +387,7 @@
                                     },
                                     "description": {
                                         "type": "string",
-                                        "example": "Queue description",
+                                        "example": "Queue description"
                                     },
                                     "queue_list": {
                                         "type": "array",
@@ -422,6 +422,86 @@
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete queue",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "type": "string",
+                        "default": "Bearer "
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Queue ID(s):\nEx: id=3 or id=[3, 4, 5]",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "start_id",
+                        "in": "query",
+                        "description": "Start ID",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "end_id",
+                        "in": "query",
+                        "description": "End ID",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "type": "object",
                             "properties": {
