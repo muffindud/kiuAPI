@@ -4,20 +4,20 @@ from os.path import isfile
 
 class DataManager:
     instance = None
-    file_path = '../data/queues.json'
+    file_path = 'data/queues.json'
 
 
     def __new__(cls) -> 'DataManager':
         if not hasattr(cls, 'instance'):
             cls.instance = super(DataManager, cls).__new__(cls)
-        return cls.instance
 
-
-    def __init__(self) -> None:
-        if not isfile(self.file_path):
-            with open(self.file_path, 'w') as file:
+        if not isfile(cls.file_path):
+            with open(cls.file_path, 'w') as file:
                 file.write('{}')
 
+        return cls.instance
+
+    def __init__(self) -> None:
         with open(self.file_path, 'r') as file:
             self.data = json.load(file)
 
