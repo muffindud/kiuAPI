@@ -7,24 +7,18 @@ class DataManager:
     file_path = 'data/queues.json'
 
 
-    def __new__(cls) -> 'DataManager':
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(DataManager, cls).__new__(cls)
-
-        if not isfile(cls.file_path):
-            with open(cls.file_path, 'w') as file:
+    def __init__(self):
+        if not isfile(self.file_path):
+            with open(self.file_path, 'w') as file:
                 file.write('{}')
 
-        return cls.instance
-
-    def __init__(self) -> None:
         with open(self.file_path, 'r') as file:
             self.data = json.load(file)
 
 
-    def get_data(self, key=[]) -> dict:
-        if key:
-            return {k: self.data[k] for k in key}
+    def get_data(self, keys=[]) -> dict:
+        if keys:
+            return {k: self.data[k] for k in keys if k in self.data}
 
         return self.data
 
