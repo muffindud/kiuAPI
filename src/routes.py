@@ -103,7 +103,16 @@ def queue():
         elif request.method == 'POST':
             if "W" in current_user:
                 try:
-                    ...
+                    data = request.get_json()
+
+                    for key in data.keys(): 
+                        if "description" not in data[key] or "name" not in data[key] or "queue_list" not in data[key] or len(data[key].keys()) != 3:
+                            return jsonify({'msg': 'Bad Request'}), 400
+
+                    if data_manager.add_data(data) == -1:
+                        return jsonify({'msg': 'Data already exists'}), 409
+
+                    return jsonify({'msg': 'Data added'}), 201
                 except Exception as e:
                     print(e)
                     return jsonify({'msg': 'Bad Request'}), 400

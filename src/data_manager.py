@@ -24,6 +24,9 @@ class DataManager:
 
 
     def add_data(self, data: dict) -> None:
+        if any(k in self.data for k in data.keys()):
+            return -1
+
         for key, value in data.items():
             self.data[key] = value
 
