@@ -29,19 +29,19 @@
                                 },
                                 "read": {
                                     "type": "boolean",
-                                    "default": false
+                                    "default": true
                                 },
                                 "write": {
                                     "type": "boolean",
-                                    "default": false
+                                    "default": true
                                 },
                                 "delete": {
                                     "type": "boolean",
-                                    "default": false
+                                    "default": true
                                 },
                                 "update": {
                                     "type": "boolean",
-                                    "default": false
+                                    "default": true
                                 }
                             }
                         }
@@ -249,6 +249,59 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "summary": "Create queue",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "type": "string",
+                        "default": "Bearer "
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Queue objects that need to be added",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Queue name"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Queue description",
+                                    },
+                                    "queue_list": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "1",
+                                            "2",
+                                            "3",
+                                            "4",
+                                            "5",
+                                            "6"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "queue_list"
+                                ]
+                            }
+                        }
+                    }
+                ]
             }
         }
     }
