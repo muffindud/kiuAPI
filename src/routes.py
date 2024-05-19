@@ -50,7 +50,7 @@ def refresh():
     }), 200
 
 
-@app.route('/api/v1/queue', methods=['GET', 'POST', 'PUT'])
+@app.route('/api/v1/queue', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @jwt_required()
 def queue():
     current_user = get_jwt_identity()
@@ -131,6 +131,48 @@ def queue():
                     data_manager.add_data(data, update=True)
 
                     return jsonify({'msg': 'Data updated'}), 200
+                except Exception as e:
+                    print(e)
+                    return jsonify({'msg': 'Bad Request'}), 400
+            else:
+                return jsonify({'msg': 'Unauthorized'}), 401
+
+        elif request.method == 'DELETE':
+            if "D" in current_user:
+                try:
+                    start_id = request.args.get('start_id')
+                    end_id = request.args.get('end_id')
+                    id = request.args.get('id')
+
+                    if start_id and end_id and not id:
+                        start_id = int(start_id)
+                        end_id = int(end_id)
+
+                        if start_id > end_id:
+                            return jsonify({'msg': 'start_id should be smaller or equal than end_id'}), 400
+
+                        if data_manager.remove_data([str(i) for i in range(start_id, end_id + 1)]) == -1:
+                            return jsonify({'msg': 'Data not found'}), 404
+                        
+                    elif id and not start_id and not end_id:
+                        id = json.loads(id)
+
+                        if type(id) is not list:
+                            id = [str(id)]
+                        else:
+                            id = [str(i) for i in id]
+
+                        if data_manager.remove_data(id) == -1:
+                            return jsonify({'msg': 'Data not found'}), 404
+                    
+                    elif id and start_id and end_id:
+                        return jsonify({'msg': 'You should use either id or start_id and end_id'}), 400
+                    
+                    elif not id and not start_id and not end_id:
+                        return jsonify({'msg': 'You should use either id or start_id and end_id'}), 400
+                    
+                    return jsonify({'msg': 'Data removed'}), 200
+
                 except Exception as e:
                     print(e)
                     return jsonify({'msg': 'Bad Request'}), 400

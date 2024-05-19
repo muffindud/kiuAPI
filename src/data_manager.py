@@ -35,7 +35,11 @@ class DataManager:
 
 
     def remove_data(self, key: list) -> None:
-        self.data.pop(key)
+        if any(k not in self.data for k in key):
+            return -1
+
+        for k in key:
+            self.data.pop(k)
 
         with open(self.file_path, 'w') as file:
             json.dump(self.data, file, indent=4)
